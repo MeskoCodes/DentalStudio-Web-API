@@ -1,6 +1,10 @@
-﻿namespace Services
+﻿using Contract.Account;
+using Contract.Authentification;
+using Domain.Repositories.Common;
+
+namespace Services
 {
-    internal sealed class AccountService(
+    public sealed class AccountService(
         IRepositoryManager repositoryManager,
         UserManager<Account> userManager,
         RoleManager<AccountRole> roleManager,

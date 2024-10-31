@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Contract.Scheduling
 {
-    internal class AppointmentDto
+    public class AppointmentDto
     {
         public int AppointmentId { get; set; }
         public int PatientId { get; set; }
@@ -18,7 +18,7 @@ namespace Contract.Scheduling
         public string Status { get; set; } = string.Empty;
     }
 
-    internal class AppointmentCreateDto
+    public class AppointmentCreateDto
     {
         public int PatientId { get; set; }
         public int TreatmentId { get; set; }
@@ -27,7 +27,7 @@ namespace Contract.Scheduling
         public TimeSpan AppointmentTime { get; set; }
     }
 
-    internal class AppointmentUpdateDto
+    public class AppointmentUpdateDto
     {
         public int AppointmentId { get; set; }
         public int PatientId { get; set; }

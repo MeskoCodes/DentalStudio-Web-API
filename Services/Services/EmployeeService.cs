@@ -1,6 +1,8 @@
-﻿using Contract; // Uveri se da ovde imaš sve potrebne DTO-eve
+﻿using Contract;
+using Contract.Account;
 using Domain.Entities;
 using Domain.Repositories;
+using Domain.Repositories.Common;
 using Mapster;
 using Services.Abstractions;
 
@@ -8,26 +10,26 @@ namespace Services
 {
     public class EmployeeService : IEmployeeService
     {
-        private readonly IRepositoryManager repositoryManager;
+        private readonly IRepositoryManager _repositoryManager;
 
         public EmployeeService(IRepositoryManager repositoryManager)
         {
-            this.repositoryManager = repositoryManager;
+            _repositoryManager = repositoryManager;
         }
 
-        public async Task<GeneralResponseDto> Create(EmployeeDto employeeDto, CancellationToken cancellationToken = default)
+        public async Task<GeneralResponseDto> Create(EmployeeCreateDto employeeDto, CancellationToken cancellationToken = default)
         {
             try
             {
                 var employee = employeeDto.Adapt<Employee>();
-                repositoryManager.EmployeeRepository.CreateEmployee(employee);
-                var rowsAffected = await repositoryManager.UnitOfWork.SaveChangesAsync(cancellationToken);
+                _repositoryManager.EmployeeRepository.CreateEmployee(employee);
+                var rowsAffected = await _repositoryManager.UnitOfWork.SaveChangesAsync(cancellationToken);
                 if (rowsAffected != 1)
                 {
                     return new GeneralResponseDto
                     {
                         IsSuccess = false,
-                        Message = "Error creating employee!"
+                        Message = "Error while creating employee!"
                     };
                 }
 
@@ -45,39 +47,45 @@ namespace Services
 
         public async Task Delete(int employeeId, CancellationToken cancellationToken = default)
         {
-            var employee = await repositoryManager.EmployeeRepository.GetById(employeeId, cancellationToken);
-            repositoryManager.EmployeeRepository.DeleteEmployee(employee, cancellationToken);
-            await repositoryManager.UnitOfWork.SaveChangesAsync(cancellationToken);
+            var employee = await _repositoryManager.EmployeeRepository.GetByIdAsync(employeeId, cancellationToken); // Ispravljeno
+            if (employee != null)
+            {
+                await _repositoryManager.EmployeeRepository.DeleteEmployee(employee, cancellationToken);
+                await _repositoryManager.UnitOfWork.SaveChangesAsync(cancellationToken);
+            }
         }
 
         public async Task<IEnumerable<EmployeeDto>> GetAll(CancellationToken cancellationToken = default)
         {
-            var employees = await repositoryManager.EmployeeRepository.GetAll(cancellationToken);
+            var employees = await _repositoryManager.EmployeeRepository.GetAllAsync(cancellationToken); // Ispravljeno
             return employees.Adapt<IEnumerable<EmployeeDto>>();
         }
 
         public async Task<EmployeeDto> GetById(int employeeId, CancellationToken cancellationToken = default)
         {
-            var employee = await repositoryManager.EmployeeRepository.GetById(employeeId, cancellationToken);
+          
+            var employee = await _repositoryManager.EmployeeRepository.GetByIdAsync(employeeId, cancellationToken);
             return employee.Adapt<EmployeeDto>();
         }
+
+
 
         public async Task<GeneralResponseDto> Update(int employeeId, EmployeeUpdateDto employeeDto, CancellationToken cancellationToken = default)
         {
             try
             {
-                var existingEmployee = await repositoryManager.EmployeeRepository.GetById(employeeId, cancellationToken);
+                var existingEmployee = await _repositoryManager.EmployeeRepository.GetByIdAsync(employeeId, cancellationToken);
                 if (existingEmployee == null)
                     return new GeneralResponseDto { IsSuccess = false, Message = "Employee not found." };
 
                 employeeDto.Adapt(existingEmployee);
 
-                repositoryManager.EmployeeRepository.UpdateEmployee(existingEmployee);
-                var res = await repositoryManager.UnitOfWork.SaveChangesAsync(cancellationToken);
+                _repositoryManager.EmployeeRepository.UpdateEmployee(existingEmployee);
+                var res = await _repositoryManager.UnitOfWork.SaveChangesAsync(cancellationToken);
                 if (res != 1)
                     return new GeneralResponseDto { IsSuccess = false };
 
-                return new GeneralResponseDto { Message = "Success!" };
+                return new GeneralResponseDto { Message = "Employee updated successfully!" };
             }
             catch (Exception ex)
             {

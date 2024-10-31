@@ -9,7 +9,7 @@ using System.Collections.Generic;
 
 namespace Contract.Account
 {
-    internal class PatientDto
+    public class PatientDto
     {
         public int PatientId { get; set; } // ID pacijenta
         public string FirstName { get; set; } = string.Empty; // Ime
@@ -20,7 +20,7 @@ namespace Contract.Account
         public DateTime RegistrationDate { get; set; } // Datum registracije
     }
 
-    internal class PatientCreateDto
+    public class PatientCreateDto
     {
         public string FirstName { get; set; } = string.Empty; // Ime
         public string? LastName { get; set; } // Prezime
@@ -29,7 +29,7 @@ namespace Contract.Account
         public string? Email { get; set; } // Email
     }
 
-    internal class PatientUpdateDto
+    public class PatientUpdateDto
     {
         public int PatientId { get; set; } 
         public string FirstName { get; set; } = string.Empty;

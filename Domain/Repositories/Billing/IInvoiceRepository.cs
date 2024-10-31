@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Domain.Entities;
+using Domain.Entities.Billing;
 
 namespace Domain.Repositories.Billing
 {
-    internal interface IInvoiceRepository
+    public interface IInvoiceRepository
     {
+        Task<Invoice> GetByIdAsync(int invoiceId, CancellationToken cancellationToken = default);
+        Task<IEnumerable<Invoice>> GetAllAsync(CancellationToken cancellationToken = default);
+        void CreateInvoice(Invoice invoice);
+        void UpdateInvoice(Invoice invoice);
+        void DeleteInvoice(Invoice invoice);
     }
 }

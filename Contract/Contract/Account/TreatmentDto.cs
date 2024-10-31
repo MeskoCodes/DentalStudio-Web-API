@@ -8,7 +8,7 @@ using System;
 
 namespace Contract.Account
 {
-    internal class TreatmentDto
+    public class TreatmentDto
     {
         public int TreatmentId { get; set; }
         public string Name { get; set; } = string.Empty;
@@ -17,7 +17,7 @@ namespace Contract.Account
         public int Duration { get; set; }
     }
 
-    internal class TreatmentCreateDto
+    public class TreatmentCreateDto
     {
         public string Name { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
@@ -25,7 +25,7 @@ namespace Contract.Account
         public int Duration { get; set; }
     }
 
-    internal class TreatmentUpdateDto
+    public class TreatmentUpdateDto
     {
         public int TreatmentId { get; set; }
         public string Name { get; set; } = string.Empty;

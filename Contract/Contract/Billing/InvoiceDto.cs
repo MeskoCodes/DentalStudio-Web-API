@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Contract.Billing
 {
-    internal class InvoiceDto
+    public class InvoiceDto
     {
         public int InvoiceId { get; set; }
         public int PatientId { get; set; }
@@ -16,14 +16,14 @@ namespace Contract.Billing
         public string Status { get; set; } = string.Empty;
     }
 
-    internal class InvoiceCreateDto
+    public class InvoiceCreateDto
     {
         public int PatientId { get; set; }
         public decimal TotalAmount { get; set; }
         public string Status { get; set; } = string.Empty;
     }
 
-    internal class InvoiceUpdateDto
+    public class InvoiceUpdateDto
     {
         public int InvoiceId { get; set; }
         public decimal TotalAmount { get; set; }

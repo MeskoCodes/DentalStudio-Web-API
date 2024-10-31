@@ -8,7 +8,7 @@ using System;
 
 namespace Contract.Billing
 {
-    internal class PaymentDto
+    public class PaymentDto
     {
         public int PaymentId { get; set; }
         public int InvoiceId { get; set; }
@@ -17,7 +17,7 @@ namespace Contract.Billing
         public string PaymentMethod { get; set; } = string.Empty;
     }
 
-    internal class PaymentCreateDto
+    public class PaymentCreateDto
     {
         public int InvoiceId { get; set; }
         public decimal Amount { get; set; }
@@ -25,7 +25,7 @@ namespace Contract.Billing
         public string PaymentMethod { get; set; } = string.Empty;
     }
 
-    internal class PaymentUpdateDto
+    public class PaymentUpdateDto
     {
         public int PaymentId { get; set; }
         public decimal Amount { get; set; }

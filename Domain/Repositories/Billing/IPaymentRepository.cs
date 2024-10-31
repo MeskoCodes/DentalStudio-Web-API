@@ -4,9 +4,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Repositories.Billing
+using Domain.Entities;
+using Domain.Entities.Billing;
+
+namespace Domain.Repositories
 {
-    internal interface IPaymentRepository
+    public interface IPaymentRepository
     {
+        Task<Payment> GetByIdAsync(int paymentId, CancellationToken cancellationToken = default);
+        Task<IEnumerable<Payment>> GetAllAsync(CancellationToken cancellationToken = default);
+        void CreatePayment(Payment payment);
+        void UpdatePayment(Payment payment);
+        void DeletePayment(Payment payment);
     }
 }
