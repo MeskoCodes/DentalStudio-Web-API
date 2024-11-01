@@ -1,17 +1,16 @@
 ﻿using Contract.Scheduling;
-using Contract;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Services.Abstractions.Scheduling
+namespace Services.Abstractions
 {
     public interface IAppointmentService
     {
-        Task<GeneralResponseDto> CreateAppointment(AppointmentCreateDto appointmentDto, CancellationToken cancellationToken = default);
-        Task<GeneralResponseDto> UpdateAppointment(string appointmentId, AppointmentUpdateDto appointmentDto, CancellationToken cancellationToken = default);
-        Task<GeneralResponseDto> DeleteAppointment(string appointmentId, CancellationToken cancellationToken = default);
-        Task<AppointmentDto> GetAppointmentById(string appointmentId, CancellationToken cancellationToken = default);
-        Task<IEnumerable<AppointmentDto>> GetAllAppointments(CancellationToken cancellationToken = default);
+        Task<IEnumerable<AppointmentDto>> GetAllAsync(CancellationToken cancellationToken);
+        Task<AppointmentDto> GetByIdAsync(int appointmentId, CancellationToken cancellationToken);
+        Task CreateAsync(AppointmentCreateDto appointmentDto, CancellationToken cancellationToken);
+        Task UpdateAsync(int appointmentId, AppointmentUpdateDto appointmentDto, CancellationToken cancellationToken);
+        Task DeleteAsync(int appointmentId, CancellationToken cancellationToken);
     }
 }

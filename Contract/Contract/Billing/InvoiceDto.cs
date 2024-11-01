@@ -10,7 +10,7 @@ namespace Contract.Billing
     public class InvoiceDto
     {
         public int InvoiceId { get; set; }
-        public int PatientId { get; set; }
+        public int EmployeeId { get; set; }
         public DateTime IssuedDate { get; set; }
         public decimal TotalAmount { get; set; }
         public string Status { get; set; } = string.Empty;
@@ -18,7 +18,7 @@ namespace Contract.Billing
 
     public class InvoiceCreateDto
     {
-        public int PatientId { get; set; }
+        public int EmployeeId { get; set; }
         public decimal TotalAmount { get; set; }
         public string Status { get; set; } = string.Empty;
     }

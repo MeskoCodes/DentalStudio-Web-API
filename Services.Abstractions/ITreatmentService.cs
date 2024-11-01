@@ -1,5 +1,4 @@
 ﻿using Contract.Account;
-using Contract;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -8,10 +7,10 @@ namespace Services.Abstractions
 {
     public interface ITreatmentService
     {
-        Task<GeneralResponseDto> CreateTreatment(TreatmentCreateDto treatmentDto, CancellationToken cancellationToken = default);
-        Task<GeneralResponseDto> UpdateTreatment(string treatmentId, TreatmentUpdateDto treatmentDto, CancellationToken cancellationToken = default);
-        Task<GeneralResponseDto> DeleteTreatment(string treatmentId, CancellationToken cancellationToken = default);
-        Task<TreatmentDto> GetTreatmentById(string treatmentId, CancellationToken cancellationToken = default);
-        Task<IEnumerable<TreatmentDto>> GetAllTreatments(CancellationToken cancellationToken = default);
+        Task<IEnumerable<TreatmentDto>> GetAllAsync(CancellationToken cancellationToken);
+        Task<TreatmentDto> GetByIdAsync(int treatmentId, CancellationToken cancellationToken);
+        Task CreateAsync(TreatmentCreateDto treatmentDto, CancellationToken cancellationToken);
+        Task UpdateAsync(int treatmentId, TreatmentUpdateDto treatmentDto, CancellationToken cancellationToken);
+        Task DeleteAsync(int treatmentId, CancellationToken cancellationToken);
     }
 }

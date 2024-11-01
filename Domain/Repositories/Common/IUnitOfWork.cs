@@ -8,6 +8,8 @@ namespace Domain.Repositories.Common
 {
     public interface IUnitOfWork
     {
+        object EmployeeRepository { get; }
+
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     }
 }

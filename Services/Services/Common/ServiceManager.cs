@@ -11,7 +11,6 @@ global using System.Security.Cryptography;
 global using System.Text;
 using Domain.Repositories.Common;
 using Services.Abstractions.Billing;
-using Services.Abstractions.Scheduling;
 using Services.Billing;
 using Services.Scheduling;
 
@@ -24,8 +23,8 @@ namespace Services
         ITokenService tokenService) : IServiceManager
     {
         private readonly Lazy<IAccountService> _lazyAccountService = new(() => new AccountService(repositoryManager, userManager, roleManager, tokenService));
-        private readonly Lazy<IPatientService> _lazyPatientService = new(() => new PatientService(repositoryManager));
         private readonly Lazy<IEmployeeService> _lazyEmployeeService = new(() => new EmployeeService(repositoryManager));
+        private readonly Lazy<IPatientService> _lazyPatientService = new(() => new PatientService(repositoryManager));
         private readonly Lazy<ITreatmentService> _lazyTreatmentService = new(() => new TreatmentService(repositoryManager));
         private readonly Lazy<IPaymentService> _lazyPaymentService = new(() => new PaymentService(repositoryManager));
         private readonly Lazy<IInvoiceService> _lazyInvoiceService = new(() => new InvoiceService(repositoryManager));
@@ -34,9 +33,9 @@ namespace Services
 
         public IAccountService AccountService => _lazyAccountService.Value;
 
-        public IPatientService PatientService => _lazyPatientService.Value;
-
         public IEmployeeService EmployeeService => _lazyEmployeeService.Value;
+
+        public IPatientService PatientService => _lazyPatientService.Value;
 
         public ITreatmentService TreatmentService => _lazyTreatmentService.Value;
 

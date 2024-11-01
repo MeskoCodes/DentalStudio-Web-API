@@ -40,7 +40,17 @@ namespace Services.Billing
             }
         }
 
+        public Task<GeneralResponseDto> CreateAsync(PaymentCreateDto paymentDto, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<GeneralResponseDto> CreatePayment(PaymentCreateDto paymentDto, CancellationToken cancellationToken = default)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<GeneralResponseDto> DeleteAsync(int paymentId, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
@@ -50,12 +60,27 @@ namespace Services.Billing
             throw new NotImplementedException();
         }
 
+        public Task<IEnumerable<PaymentDto>> GetAllAsync(CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<IEnumerable<PaymentDto>> GetAllPayments(CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }
 
+        public Task<PaymentDto> GetByIdAsync(int paymentId, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<PaymentDto> GetPaymentById(string paymentId, CancellationToken cancellationToken = default)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<GeneralResponseDto> UpdateAsync(int paymentId, PaymentUpdateDto paymentDto, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }

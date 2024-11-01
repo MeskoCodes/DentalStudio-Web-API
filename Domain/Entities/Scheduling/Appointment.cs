@@ -14,9 +14,9 @@ public class Appointment
     public string TreatmentType { get; set; } = string.Empty; 
 
    
-    public int PatientId { get; set; }  
-    public virtual Patient Patient { get; set; } = null!; 
-
-    public int EmployeeId { get; set; } 
+    public int EmployeeId { get; set; }  
     public virtual Employee Employee { get; set; } = null!; 
+
+    public int PatientId { get; set; } 
+    public virtual Patient Patient { get; set; } = null!; 
 }

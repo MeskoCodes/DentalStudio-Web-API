@@ -1,12 +1,6 @@
-﻿using Contract;
-using Contract.Scheduling;
-using Domain.Entities;
+﻿using Contract.Scheduling;
 using Domain.Entities.Scheduling;
-using Domain.Repositories;
 using Domain.Repositories.Common;
-using Mapster;
-using Services.Abstractions;
-using Services.Abstractions.Scheduling;
 
 namespace Services.Scheduling
 
@@ -46,7 +40,17 @@ namespace Services.Scheduling
             throw new NotImplementedException();
         }
 
+        public Task CreateAsync(AppointmentCreateDto appointmentDto, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<GeneralResponseDto> DeleteAppointment(string appointmentId, CancellationToken cancellationToken = default)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task DeleteAsync(int appointmentId, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
@@ -56,12 +60,27 @@ namespace Services.Scheduling
             throw new NotImplementedException();
         }
 
+        public Task<IEnumerable<AppointmentDto>> GetAllAsync(CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<AppointmentDto> GetAppointmentById(string appointmentId, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }
 
+        public Task<AppointmentDto> GetByIdAsync(int appointmentId, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<GeneralResponseDto> UpdateAppointment(string appointmentId, AppointmentUpdateDto appointmentDto, CancellationToken cancellationToken = default)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task UpdateAsync(int appointmentId, AppointmentUpdateDto appointmentDto, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }

@@ -1,68 +1,60 @@
-﻿using Contract;
-using Contract.Account;
+﻿using Contract.Account;
 using Domain.Entities;
 using Domain.Repositories;
 using Domain.Repositories.Common;
 using Mapster;
 using Services.Abstractions;
+using System;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Services
 {
-    public class PatientService(IRepositoryManager repositoryManager) : IPatientService
+    public class PatientService : IPatientService
     {
-        public async Task<GeneralResponseDto> Create(PatientCreateDto patientDto, CancellationToken cancellationToken = default)
-        {
-            try
-            {
-                var patient = patientDto.Adapt<Patient>();
-                repositoryManager.PatientRepository.CreatePatient(patient);
-                var rowsAffected = await repositoryManager.UnitOfWork.SaveChangesAsync(cancellationToken);
-                if (rowsAffected != 1)
-                {
-                    return new GeneralResponseDto
-                    {
-                        IsSuccess = false,
-                        Message = "Error!"
-                    };
-                }
+        private readonly IRepositoryManager _repositoryManager;
 
-                return new GeneralResponseDto { Message = "Success!" };
-            }
-            catch (Exception ex)
-            {
-                return new GeneralResponseDto
-                {
-                    IsSuccess = false,
-                    Message = ex.Message
-                };
-            }
+        public PatientService(IRepositoryManager repositoryManager)
+        {
+            _repositoryManager = repositoryManager;
         }
 
-        public Task<GeneralResponseDto> CreatePatient(PatientCreateDto patientDto, CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<PatientDto>> GetAllAsync(CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var patients = await _repositoryManager.PatientRepository.GetAllAsync(cancellationToken);
+            return patients.Adapt<IEnumerable<PatientDto>>();
         }
 
-        public Task<GeneralResponseDto> DeletePatient(string patientId, CancellationToken cancellationToken = default)
+        public async Task<PatientDto> GetById(int patientId, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var patient = await _repositoryManager.PatientRepository.GetByIdAsync(patientId, cancellationToken);
+            return patient.Adapt<PatientDto>();
         }
 
-        public Task<IEnumerable<PatientDto>> GetAllPatients(CancellationToken cancellationToken = default)
+        public async Task CreateAsync(PatientCreateDto patientDto, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var patient = patientDto.Adapt<Patient>();
+            _repositoryManager.PatientRepository.CreatePatient(patient);
+            await _repositoryManager.UnitOfWork.SaveChangesAsync(cancellationToken);
         }
 
-        public Task<PatientDto> GetPatientById(string patientId, CancellationToken cancellationToken = default)
+        public async Task UpdateAsync(int patientId, PatientUpdateDto patientDto, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var patient = await _repositoryManager.PatientRepository.GetByIdAsync(patientId, cancellationToken);
+            patient.FirstName = patientDto.FirstName;
+            patient.LastName = patientDto.LastName;
+            patient.MobileNumber = patientDto.MobileNumber;
+            patient.Email = patientDto.Email;
+
+            await _repositoryManager.UnitOfWork.SaveChangesAsync(cancellationToken);
         }
 
-        public Task<GeneralResponseDto> UpdatePatient(string patientId, PatientUpdateDto patientDto, CancellationToken cancellationToken = default)
+        public async Task DeleteAsync(int patientId, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var patient = await _repositoryManager.PatientRepository.GetByIdAsync(patientId, cancellationToken);
+            _repositoryManager.PatientRepository.DeletePatient(patient);
+            await _repositoryManager.UnitOfWork.SaveChangesAsync(cancellationToken);
         }
-
-        // Implement other methods (Delete, GetAll, GetById, Update) similarly
     }
 }

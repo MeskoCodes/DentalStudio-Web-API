@@ -1,5 +1,4 @@
 ﻿using Contract.Billing;
-using Contract;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -8,10 +7,11 @@ namespace Services.Abstractions.Billing
 {
     public interface IInvoiceService
     {
-        Task<GeneralResponseDto> CreateInvoice(InvoiceCreateDto invoiceDto, CancellationToken cancellationToken = default);
-        Task<GeneralResponseDto> UpdateInvoice(string invoiceId, InvoiceUpdateDto invoiceDto, CancellationToken cancellationToken = default);
-        Task<GeneralResponseDto> DeleteInvoice(string invoiceId, CancellationToken cancellationToken = default);
-        Task<InvoiceDto> GetInvoiceById(string invoiceId, CancellationToken cancellationToken = default);
-        Task<IEnumerable<InvoiceDto>> GetAllInvoices(CancellationToken cancellationToken = default);
+        Task<IEnumerable<InvoiceDto>> GetAllAsync(CancellationToken cancellationToken);
+        Task<InvoiceDto> GetByIdAsync(int invoiceId, CancellationToken cancellationToken);
+        Task<GeneralResponseDto> CreateAsync(InvoiceCreateDto invoiceDto, CancellationToken cancellationToken);
+        Task<GeneralResponseDto> UpdateAsync(int invoiceId, InvoiceUpdateDto invoiceDto, CancellationToken cancellationToken);
+        Task<GeneralResponseDto> DeleteAsync(int invoiceId, CancellationToken cancellationToken);
+
     }
 }

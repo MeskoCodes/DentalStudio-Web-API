@@ -1,6 +1,7 @@
 ﻿global using Contract;
 global using System.Security.Claims;
 using Services.Abstractions.Billing;
+using Services.Abstractions.Scheduling;
 
 namespace Services.Abstractions
 {
@@ -15,5 +16,6 @@ namespace Services.Abstractions
         IPatientService PatientService { get; }
 
         ITreatmentService TreatmentService { get; }
+        IAppointmentService AppointmentService { get; }
     }
 }

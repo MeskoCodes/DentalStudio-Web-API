@@ -1,18 +1,15 @@
 ﻿using Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Domain.Repositories
 {
     public interface IPatientRepository
     {
-        Task<Patient> GetByIdAsync(int patientId, CancellationToken cancellationToken = default);
+        Task CreatePatient(Patient Patient);
+        Task DeletePatient(Patient Patient);
+        Task UpdatePatient(Patient Patient);
         Task<IEnumerable<Patient>> GetAllAsync(CancellationToken cancellationToken = default);
-        void CreatePatient(Patient patient);
-        void UpdatePatient(Patient patient);
-        void DeletePatient(Patient patient);
+        Task<Patient?> GetByIdAsync(int PatientId, CancellationToken cancellationToken = default);
     }
 }

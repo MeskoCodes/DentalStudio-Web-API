@@ -1,68 +1,61 @@
-﻿using Contract;
-using Contract.Account;
-using Domain.Entities;
+﻿using Contract.Account;
+using Domain.Entities; // Uveri se da imaš potrebne using direktive
 using Domain.Repositories;
 using Domain.Repositories.Common;
-using Mapster;
 using Services.Abstractions;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Services
 {
-    public class TreatmentService(IRepositoryManager repositoryManager) : ITreatmentService
+    public class TreatmentService : ITreatmentService
     {
-        public async Task<GeneralResponseDto> Create(TreatmentCreateDto treatmentDto, CancellationToken cancellationToken = default)
+        private readonly IRepositoryManager _repositoryManager;
+
+        public TreatmentService(IRepositoryManager repositoryManager)
         {
-            try
+            _repositoryManager = repositoryManager;
+        }
+
+        public async Task<IEnumerable<TreatmentDto>> GetAllAsync(CancellationToken cancellationToken)
+        {
+          
+            var treatments = await _repositoryManager.TreatmentRepository.GetAllAsync(cancellationToken);
+
+            
+            return treatments.Adapt<IEnumerable<TreatmentDto>>();
+        }
+
+        public async Task<TreatmentDto> GetByIdAsync(int treatmentId, CancellationToken cancellationToken)
+        {
+            
+            var treatment = await _repositoryManager.TreatmentRepository.GetByIdAsync(treatmentId, cancellationToken);
+
+          
+            if (treatment == null)
             {
-                var treatment = treatmentDto.Adapt<Treatment>();
-                repositoryManager.TreatmentRepository.CreateTreatment(treatment);
-                var rowsAffected = await repositoryManager.UnitOfWork.SaveChangesAsync(cancellationToken);
-                if (rowsAffected != 1)
-                {
-                    return new GeneralResponseDto
-                    {
-                        IsSuccess = false,
-                        Message = "Error!"
-                    };
-                }
-
-                return new GeneralResponseDto { Message = "Success!" };
+               
+                return null; 
             }
-            catch (Exception ex)
-            {
-                return new GeneralResponseDto
-                {
-                    IsSuccess = false,
-                    Message = ex.Message
-                };
-            }
+
+ 
+            return treatment.Adapt<TreatmentDto>();
         }
 
-        public Task<GeneralResponseDto> CreateTreatment(TreatmentCreateDto treatmentDto, CancellationToken cancellationToken = default)
+        public async Task CreateAsync(TreatmentCreateDto treatmentDto, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+       
         }
 
-        public Task<GeneralResponseDto> DeleteTreatment(string treatmentId, CancellationToken cancellationToken = default)
+        public async Task UpdateAsync(int treatmentId, TreatmentUpdateDto treatmentDto, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            
         }
 
-        public Task<IEnumerable<TreatmentDto>> GetAllTreatments(CancellationToken cancellationToken = default)
+        public async Task DeleteAsync(int treatmentId, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            
         }
-
-        public Task<TreatmentDto> GetTreatmentById(string treatmentId, CancellationToken cancellationToken = default)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<GeneralResponseDto> UpdateTreatment(string treatmentId, TreatmentUpdateDto treatmentDto, CancellationToken cancellationToken = default)
-        {
-            throw new NotImplementedException();
-        }
-
-        // Implement other methods (Delete, GetAll, GetById, Update) similarly
     }
 }
