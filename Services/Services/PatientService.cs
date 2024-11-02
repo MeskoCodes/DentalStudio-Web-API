@@ -56,5 +56,10 @@ namespace Services
             _repositoryManager.PatientRepository.DeletePatient(patient);
             await _repositoryManager.UnitOfWork.SaveChangesAsync(cancellationToken);
         }
+
+        public Task<PatientDto> GetByIdAsync(int patientId, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

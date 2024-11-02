@@ -1,7 +1,7 @@
 ﻿global using Contract;
 global using System.Security.Claims;
 using Services.Abstractions.Billing;
-using Services.Abstractions.Scheduling;
+using Services;
 
 namespace Services.Abstractions
 {

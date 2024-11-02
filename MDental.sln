@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.11.35327.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MDental", "MDental\MDental.csproj", "{9F07F803-8A64-4AC8-A9A9-52E8B9BC51E1}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E431B094-A11A-43A9-8695-B81F6C733E49} = {E431B094-A11A-43A9-8695-B81F6C733E49}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{4D45DAF0-D32A-44F5-B421-874C24141D84}"
 EndProject
@@ -14,12 +17,15 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services", "Services\Services\Services.csproj", "{5A08CE1B-1FEB-4983-A241-30AF30B46F1F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services.Abstractions", "Services.Abstractions\Services.Abstractions.csproj", "{DE28D4BF-3C92-4DC3-8491-F0CC633714B1}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B42F4D69-A626-4BE4-981B-D7F384790B05} = {B42F4D69-A626-4BE4-981B-D7F384790B05}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{5D331F60-CB51-4558-8B51-E90FF1C44A89}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Persistence", "Persistence\Persistence.csproj", "{637311E4-C41F-4437-83B0-1A0D58FBDEAB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Presentation", "Presentation\Presentation\Presentation.csproj", "{E431B094-A11A-43A9-8695-B81F6C733E49}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Presentation", "Presentation\Presentation\Presentation.csproj", "{E431B094-A11A-43A9-8695-B81F6C733E49}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,25 +1,26 @@
-﻿global using Domain.Entities;
-global using Microsoft.AspNetCore.Identity;
-global using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-global using Microsoft.EntityFrameworkCore;
-global using Microsoft.EntityFrameworkCore.Metadata.Builders;
-global using Persistence.Configurations;
+﻿using Domain.Entities;
 using Domain.Entities.Billing;
 using Domain.Entities.Scheduling;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using Persistence.Configurations;
 
 namespace Persistence;
 
-public sealed class DataContext(DbContextOptions options) : IdentityDbContext<
+public sealed class DataContext : IdentityDbContext<
     Account,
     AccountRole,
     string,
-    IdentityUserClaim<string>, // TUserClaim
-    AccountIdentityUserRole, // TUserRole,
-    IdentityUserLogin<string>, // TUserLogin
-    IdentityRoleClaim<string>, // TRoleClaim
-    IdentityUserToken<string> // TUserToken
->(options)
+    IdentityUserClaim<string>,
+    AccountIdentityUserRole,
+    IdentityUserLogin<string>,
+    IdentityRoleClaim<string>,
+    IdentityUserToken<string>
+>
 {
+    public DataContext(DbContextOptions<DataContext> options) : base(options) { }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -48,5 +49,5 @@ public sealed class DataContext(DbContextOptions options) : IdentityDbContext<
     public DbSet<Appointment> Appointments { get; set; }
     public DbSet<Treatment> Treatments { get; set; }
     public DbSet<Employee> Employees { get; set; }
-    public DbSet<Employee> Patient { get; set; }
+    public DbSet<Patient> Patients { get; set; }
 }

@@ -1,5 +1,6 @@
 using Domain.Entities;
 using Domain.Repositories;
+using Domain.Repositories.Common;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -48,10 +49,18 @@ void ConfigureDatabase(IServiceCollection services, IConfiguration configuration
 {
     services.AddDbContextPool<DataContext>(options =>
     {
-        options.UseMySQL(configuration.GetConnectionString("MainDB"),
-            mysqlOptions => { mysqlOptions.EnableRetryOnFailure(1, TimeSpan.FromSeconds(5), null); });
+        options.UseMySql(configuration.GetConnectionString("MainDB"),
+            new MySqlServerVersion(new Version(8, 0, 21)),
+            mysqlOptions =>
+            {
+                mysqlOptions.EnableRetryOnFailure(1, TimeSpan.FromSeconds(5), null);
+            }).UseMySql(configuration.GetConnectionString("MainDB"),
+                new MySqlServerVersion(new Version(8, 0, 21)),
+                mysqlOptions => mysqlOptions.MigrationsAssembly("MDental")); // ovde postavite naziv
     });
 }
+
+
 
 void ConfigureJwtAuthentication(IServiceCollection services, IConfiguration configuration)
 {

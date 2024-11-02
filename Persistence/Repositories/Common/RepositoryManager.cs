@@ -26,6 +26,9 @@ namespace Persistence.Repositories
         public IUnitOfWork UnitOfWork => _lazyUnitOfWork.Value;
         public IEmployeeRepository EmployeeRepository => _lazyEmployeeRepository.Value;
         public IPatientRepository Patientrepository => _lazyPatientRepository.Value;
+
+        public IPatientRepository PatientRepository => throw new NotImplementedException();
+
         public ITreatmentRepository TreatmentRepository => _lazyTreatmentRepository.Value;
 
         // Billing repozitoriji
