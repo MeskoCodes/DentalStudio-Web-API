@@ -33,8 +33,7 @@ namespace Presentation.Controllers
             return NoContent();
         }
 
-        [HttpPost("create")]
-        [HttpPost("create")]
+        [HttpPost("create")] // Zadržite samo ovu liniju
         public async Task<IActionResult> Create([FromBody] PatientCreateDto patientDto, CancellationToken cancellationToken)
         {
             await _serviceManager.PatientService.CreateAsync(patientDto, cancellationToken);
@@ -50,7 +49,6 @@ namespace Presentation.Controllers
         }
 
         [Authorize]
-
         [HttpPut("update/{patientId}")]
         public async Task<IActionResult> UpdatePatient(int patientId, [FromBody] PatientUpdateDto patientDto, CancellationToken cancellationToken)
         {

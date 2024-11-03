@@ -13,18 +13,20 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-ConfigureServices(builder.Services);
+// Konfiguracija servisa
+ConfigureServices(builder.Services, builder.Configuration);
 ConfigureDatabase(builder.Services, builder.Configuration);
 ConfigureJwtAuthentication(builder.Services, builder.Configuration);
 ConfigureCors(builder.Services);
 
 var app = builder.Build();
 
+// Konfiguracija aplikacije
 ConfigureApp(app, builder.Environment);
 
 app.Run();
 
-void ConfigureServices(IServiceCollection services)
+void ConfigureServices(IServiceCollection services, IConfiguration configuration)
 {
     services.AddControllers().AddApplicationPart(typeof(Presentation.AssemblyReference).Assembly);
     services.AddEndpointsApiExplorer();
@@ -41,8 +43,8 @@ void ConfigureServices(IServiceCollection services)
         opt.Password.RequireUppercase = true;
         opt.SignIn.RequireConfirmedEmail = true;
     })
-        .AddEntityFrameworkStores<DataContext>()
-        .AddDefaultTokenProviders();
+    .AddEntityFrameworkStores<DataContext>()
+    .AddDefaultTokenProviders();
 }
 
 void ConfigureDatabase(IServiceCollection services, IConfiguration configuration)
@@ -54,13 +56,9 @@ void ConfigureDatabase(IServiceCollection services, IConfiguration configuration
             mysqlOptions =>
             {
                 mysqlOptions.EnableRetryOnFailure(1, TimeSpan.FromSeconds(5), null);
-            }).UseMySql(configuration.GetConnectionString("MainDB"),
-                new MySqlServerVersion(new Version(8, 0, 21)),
-                mysqlOptions => mysqlOptions.MigrationsAssembly("MDental")); // ovde postavite naziv
+            });
     });
 }
-
-
 
 void ConfigureJwtAuthentication(IServiceCollection services, IConfiguration configuration)
 {
@@ -74,8 +72,8 @@ void ConfigureJwtAuthentication(IServiceCollection services, IConfiguration conf
     {
         options.TokenValidationParameters = new TokenValidationParameters
         {
-            ValidateIssuer = false,
-            ValidateAudience = false,
+            ValidateIssuer = true,
+            ValidateAudience = true,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
             ValidIssuer = jwtSettings["validIssuer"],
@@ -92,8 +90,8 @@ void ConfigureCors(IServiceCollection services)
         options.AddPolicy("Storage", builder =>
         {
             builder.AllowAnyOrigin()
-                .AllowAnyMethod()
-                .AllowAnyHeader();
+                   .AllowAnyMethod()
+                   .AllowAnyHeader();
         });
     });
 }
