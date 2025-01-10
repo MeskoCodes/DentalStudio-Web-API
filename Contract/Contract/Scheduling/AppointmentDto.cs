@@ -13,6 +13,7 @@ namespace Contract.Scheduling
         public int EmployeeId { get; set; }
         public int TreatmentId { get; set; }
         public int PatientId { get; set; }
+        public int PatientName { get; set; }
         public DateTime AppointmentDate { get; set; }
         public TimeSpan AppointmentTime { get; set; }
         public string Status { get; set; } = string.Empty;
@@ -20,11 +21,14 @@ namespace Contract.Scheduling
 
     public class AppointmentCreateDto
     {
+        public int AppointmentId { get; set; }
         public int EmployeeId { get; set; }
         public int TreatmentId { get; set; }
         public int PatientId { get; set; }
+        public int PatientName { get; set; }
         public DateTime AppointmentDate { get; set; }
         public TimeSpan AppointmentTime { get; set; }
+        public string Status { get; set; } = string.Empty;
     }
 
     public class AppointmentUpdateDto
@@ -32,6 +36,7 @@ namespace Contract.Scheduling
         public int AppointmentId { get; set; }
         public int EmployeeId { get; set; }
         public int TreatmentId { get; set; }
+        public int PatientName { get; set; }
         public int PatientId { get; set; }
         public DateTime AppointmentDate { get; set; }
         public TimeSpan AppointmentTime { get; set; }

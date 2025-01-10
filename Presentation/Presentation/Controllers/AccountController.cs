@@ -1,4 +1,5 @@
 ﻿using Contract;
+using Contract.Account;
 using Contract.Authentification;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
