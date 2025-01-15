@@ -1,5 +1,5 @@
-﻿using Contract.Account;
-using Contract.Authentification;
+﻿
+using Contract.Authentication;
 using Domain.Repositories.Common;
 
 namespace Services

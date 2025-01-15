@@ -1,48 +1,29 @@
-﻿using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-using Domain.Entities;
-using Domain.Repositories;
-using Services.Abstractions;
-using Contract;
-using Contract.Account;
+﻿using Domain.Repositories;
 using Domain.Repositories.Common;
+using Persistence.Repositories;
 
 namespace Services
 {
     public class EmployeeService : IEmployeeService
     {
         private readonly IEmployeeRepository _employeeRepository;
-        private IRepositoryManager repositoryManager;
-
-        public EmployeeService(IEmployeeRepository employeeRepository)
-        {
-            _employeeRepository = employeeRepository;
-        }
+        private readonly IRepositoryManager _repositoryManager;
 
         public EmployeeService(IRepositoryManager repositoryManager)
         {
-            this.repositoryManager = repositoryManager;
+            _repositoryManager = repositoryManager;
         }
+
 
         public async Task<IEnumerable<EmployeeDto>> GetAllAsync(CancellationToken cancellationToken)
         {
-            var employees = await _employeeRepository.GetAllAsync(cancellationToken);
-            // Map entities to DTOs
-            return employees.Select(employee => new EmployeeDto
-            {
-                // Map properties here
-            });
+            var employee = await _repositoryManager.EmployeeRepository.GetAllAsync(cancellationToken);
+            return employee.Adapt<IEnumerable<EmployeeDto>>();
         }
 
-        public async Task<EmployeeDto> GetByIdAsync(int employeeId, CancellationToken cancellationToken)
+        public Task<EmployeeDto> GetByIdAsync(int employeeId, CancellationToken cancellationToken)
         {
-            var employee = await _employeeRepository.GetByIdAsync(employeeId, cancellationToken);
-            // Map to DTO
-            return employee != null ? new EmployeeDto
-            {
-                // Map properties here
-            } : null;
+            throw new NotImplementedException();
         }
 
         public async Task CreateAsync(EmployeeCreateDto employeeDto, CancellationToken cancellationToken)

@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using System.Xml.Linq;
 
-namespace Domain.Entities;
+namespace Domain.Entities.JointTables;
 
 public class AccountIdentityUserRole : IdentityUserRole<string>
 {

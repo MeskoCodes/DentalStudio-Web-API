@@ -1,13 +1,11 @@
 ﻿using Contract;
-using Contract.Account;
-using Contract.Authentification;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Abstractions;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace Presentation.Controllers
+
+namespace MDental.UI.Controllers
 {
     [ApiController]
     [Route("api/accounts")]

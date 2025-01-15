@@ -1,5 +1,4 @@
-﻿using Contract.Account;
-using Domain.Entities; // Uveri se da imaš potrebne using direktive
+﻿using Domain.Entities; // Uveri se da imaš potrebne using direktive
 using Domain.Repositories;
 using Domain.Repositories.Common;
 using Services.Abstractions;

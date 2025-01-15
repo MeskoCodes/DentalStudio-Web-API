@@ -1,6 +1,4 @@
-﻿using Contract;
-using Contract.Account;
-using Contract.Authentification;
+﻿using Contract.Authentication;
 
 namespace Services.Abstractions;
 

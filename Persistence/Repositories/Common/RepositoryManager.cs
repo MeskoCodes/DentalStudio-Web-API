@@ -1,9 +1,7 @@
 ﻿using Domain.Repositories;
 using Domain.Repositories.Billing;
 using Domain.Repositories.Common;
-using Domain.Repositories.Scheduling;
 using Persistence.Repositories.Billing;
-using Persistence.Repositories.Scheduling;
 
 namespace Persistence.Repositories
 {
@@ -25,10 +23,7 @@ namespace Persistence.Repositories
         public IAccountRepository AccountRepository => _lazyAccountRepository.Value;
         public IUnitOfWork UnitOfWork => _lazyUnitOfWork.Value;
         public IEmployeeRepository EmployeeRepository => _lazyEmployeeRepository.Value;
-        public IPatientRepository Patientrepository => _lazyPatientRepository.Value;
-
-        public IPatientRepository PatientRepository => throw new NotImplementedException();
-
+        public IPatientRepository PatientRepository => _lazyPatientRepository.Value;
         public ITreatmentRepository TreatmentRepository => _lazyTreatmentRepository.Value;
 
         // Billing repozitoriji

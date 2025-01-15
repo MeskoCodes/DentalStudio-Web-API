@@ -1,95 +1,58 @@
-﻿using Contract;
-using Contract.Billing;
-using Domain.Entities;
+﻿using Contract.Billing;
 using Domain.Entities.Billing;
-using Domain.Repositories;
 using Domain.Repositories.Common;
-using Mapster;
-using Services.Abstractions;
-using Services.Abstractions.Billing;
 
-namespace Services.Billing
+namespace Services
 {
-    public class InvoiceService(IRepositoryManager repositoryManager) : IInvoiceService
+    public class InvoiceService : IInvoiceService
     {
-        public async Task<GeneralResponseDto> Create(InvoiceCreateDto invoiceDto, CancellationToken cancellationToken = default)
-        {
-            try
-            {
-                var invoice = invoiceDto.Adapt<Invoice>();
-                repositoryManager.InvoiceRepository.CreateInvoice(invoice);
-                var rowsAffected = await repositoryManager.UnitOfWork.SaveChangesAsync(cancellationToken);
-                if (rowsAffected != 1)
-                {
-                    return new GeneralResponseDto
-                    {
-                        IsSuccess = false,
-                        Message = "Error!"
-                    };
-                }
+        private readonly IRepositoryManager _repositoryManager;
 
-                return new GeneralResponseDto { Message = "Success!" };
-            }
-            catch (Exception ex)
-            {
-                return new GeneralResponseDto
-                {
-                    IsSuccess = false,
-                    Message = ex.Message
-                };
-            }
+        public InvoiceService(IRepositoryManager repositoryManager)
+        {
+            _repositoryManager = repositoryManager;
         }
 
-        public Task<GeneralResponseDto> CreateAsync(InvoiceCreateDto invoiceDto, CancellationToken cancellationToken)
+        public async Task<IEnumerable<InvoiceDto>> GetAllAsync(CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var invoice = await _repositoryManager.InvoiceRepository.GetAllAsync(cancellationToken);
+            return invoice.Adapt<IEnumerable<InvoiceDto>>();
         }
 
-        public Task<GeneralResponseDto> CreateInvoice(InvoiceCreateDto invoiceDto, CancellationToken cancellationToken = default)
+        public async Task<InvoiceDto> GetById(int invoiceId, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var invoice = await _repositoryManager.InvoiceRepository.GetByIdAsync(invoiceId, cancellationToken);
+            return invoice.Adapt<InvoiceDto>();
         }
 
-        public Task<GeneralResponseDto> DeleteAsync(int invoiceId, CancellationToken cancellationToken)
+        public async Task CreateAsync(InvoiceCreateDto invoiceDto, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var invoice = invoiceDto.Adapt<Invoice>();
+            _repositoryManager.InvoiceRepository.CreateInvoice(invoice);
+            await _repositoryManager.UnitOfWork.SaveChangesAsync(cancellationToken);
         }
 
-        public Task<GeneralResponseDto> DeleteInvoice(string invoiceId, CancellationToken cancellationToken = default)
+        public async Task UpdateAsync(int invoiceId, InvoiceUpdateDto invoiceDto, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var invoice = await _repositoryManager.InvoiceRepository.GetByIdAsync(invoiceId, cancellationToken);
+            invoice.InvoiceId = invoiceDto.InvoiceId;
+            invoice.TotalAmount = invoiceDto.TotalAmount;
+            invoice.InvoiceNumber = invoiceDto.InvoiceNumber;
+            invoice.Status = invoiceDto.Status;
+
+            await _repositoryManager.UnitOfWork.SaveChangesAsync(cancellationToken);
         }
 
-        public Task<IEnumerable<InvoiceDto>> GetAllAsync(CancellationToken cancellationToken)
+        public async Task DeleteAsync(int invoiceId, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var invoice = await _repositoryManager.InvoiceRepository.GetByIdAsync(invoiceId, cancellationToken);
+            _repositoryManager.InvoiceRepository.DeleteInvoice(invoice);
+            await _repositoryManager.UnitOfWork.SaveChangesAsync(cancellationToken);
         }
-
-        public Task<IEnumerable<InvoiceDto>> GetAllInvoices(CancellationToken cancellationToken = default)
-        {
-            throw new NotImplementedException();
-        }
-
         public Task<InvoiceDto> GetByIdAsync(int invoiceId, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
-        public Task<InvoiceDto> GetInvoiceById(string invoiceId, CancellationToken cancellationToken = default)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<GeneralResponseDto> UpdateAsync(int invoiceId, InvoiceUpdateDto invoiceDto, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<GeneralResponseDto> UpdateInvoice(string invoiceId, InvoiceUpdateDto invoiceDto, CancellationToken cancellationToken = default)
-        {
-            throw new NotImplementedException();
-        }
-
-        // Implement other methods (Delete, GetAll, GetById, Update) similarly
     }
 }

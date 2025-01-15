@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-
-namespace Contract.Scheduling
+﻿namespace Contract
 {
     public class AppointmentDto
     {
@@ -13,7 +6,7 @@ namespace Contract.Scheduling
         public int EmployeeId { get; set; }
         public int TreatmentId { get; set; }
         public int PatientId { get; set; }
-        public int PatientName { get; set; }
+        public string PatientName { get; set; } = string.Empty;
         public DateTime AppointmentDate { get; set; }
         public TimeSpan AppointmentTime { get; set; }
         public string Status { get; set; } = string.Empty;
@@ -21,11 +14,11 @@ namespace Contract.Scheduling
 
     public class AppointmentCreateDto
     {
-        public int AppointmentId { get; set; }
+     
         public int EmployeeId { get; set; }
         public int TreatmentId { get; set; }
         public int PatientId { get; set; }
-        public int PatientName { get; set; }
+        public string PatientName { get; set; } = string.Empty; 
         public DateTime AppointmentDate { get; set; }
         public TimeSpan AppointmentTime { get; set; }
         public string Status { get; set; } = string.Empty;
@@ -36,7 +29,7 @@ namespace Contract.Scheduling
         public int AppointmentId { get; set; }
         public int EmployeeId { get; set; }
         public int TreatmentId { get; set; }
-        public int PatientName { get; set; }
+        public string PatientName { get; set; } = string.Empty; 
         public int PatientId { get; set; }
         public DateTime AppointmentDate { get; set; }
         public TimeSpan AppointmentTime { get; set; }

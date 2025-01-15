@@ -1,20 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Domain.Entities.Billing;
-
-public class Invoice
+﻿namespace Domain.Entities.Billing
 {
-    public int InvoiceId { get; set; }  // Jedinstveni ID računa
-    public string InvoiceNumber { get; set; } = string.Empty;  // Broj računa
-    public decimal Amount { get; set; }  // Iznos računa
-    public DateTime DateIssued { get; set; }  // Datum izdavanja računa
-    public DateTime? DueDate { get; set; }  // Datum dospeća
-    public bool IsPaid { get; set; }  // Status plaćanja
+    public class Invoice
+    {
+        public int InvoiceId { get; set; }
+        public string InvoiceNumber { get; set; } = string.Empty;
+        public DateTime IssuedDate { get; set; }
+        public decimal TotalAmount { get; set; }
+        public string Status { get; set; } = string.Empty;
+      
 
-    // Navigaciona svojstva
-    public virtual ICollection<Payment> Payment { get; set; } = new List<Payment>();
+        public virtual ICollection<Payment> Payment { get; set; } = new List<Payment>();
+
+        public int EmployeeId { get; set; }
+        public virtual Employee Employee { get; set; }
+    }
 }

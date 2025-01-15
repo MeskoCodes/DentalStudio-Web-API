@@ -1,5 +1,5 @@
+using Contract.Billing;
 using Domain.Entities;
-using Domain.Repositories;
 using Domain.Repositories.Common;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -28,10 +28,16 @@ app.Run();
 
 void ConfigureServices(IServiceCollection services, IConfiguration configuration)
 {
-    services.AddControllers().AddApplicationPart(typeof(Presentation.AssemblyReference).Assembly);
+    services.AddControllers();
     services.AddEndpointsApiExplorer();
     services.AddSwaggerGen();
 
+    services.AddScoped<IEmployeeService, EmployeeService>();
+    services.AddScoped<IPatientService, PatientService>();
+    services.AddScoped<IAppointmentService, AppointmentService>();
+    services.AddScoped<IInvoiceService, InvoiceService>();
+    services.AddScoped<IPaymentService, PaymentService>(); ;
+    
     services.AddScoped<IRepositoryManager, RepositoryManager>();
     services.AddScoped<IServiceManager, ServiceManager>();
     services.AddScoped<ITokenService, TokenService>();
@@ -87,7 +93,7 @@ void ConfigureCors(IServiceCollection services)
 {
     services.AddCors(options =>
     {
-        options.AddPolicy("Storage", builder =>
+        options.AddPolicy("Mdental", builder =>
         {
             builder.AllowAnyOrigin()
                    .AllowAnyMethod()
@@ -98,7 +104,7 @@ void ConfigureCors(IServiceCollection services)
 
 void ConfigureApp(WebApplication app, IHostEnvironment environment)
 {
-    app.UseCors("Storage");
+    app.UseCors("Mdental");
 
     if (environment.IsDevelopment())
     {

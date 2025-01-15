@@ -1,13 +1,9 @@
-﻿using Contract.Account;
-using Contract.Scheduling;
+﻿using Contract;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Abstractions;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace Presentation.Controllers
+namespace Presentation
 {
     [ApiController]
     [Route("api/appointments")]

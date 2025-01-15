@@ -1,14 +1,11 @@
-﻿using Contract;
+﻿
 using Contract.Billing;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Abstractions;
-using Services.Abstractions.Billing;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace Presentation.Controllers.Billing
+
+namespace MDental.UI.Controllers.Billing
 {
     [ApiController]
     [Route("api/payments")]

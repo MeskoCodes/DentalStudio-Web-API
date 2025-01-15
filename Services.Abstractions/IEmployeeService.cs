@@ -1,10 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-using Contract;
-using Contract.Account;
-
-namespace Services.Abstractions
+﻿namespace Services.Abstractions
 {
     public interface IEmployeeService
     {

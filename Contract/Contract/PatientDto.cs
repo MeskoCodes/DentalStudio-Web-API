@@ -1,13 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using System;
-using System.Collections.Generic;
-
-namespace Contract.Account
+﻿namespace Contract
 {
     public class PatientDto
     {
@@ -22,7 +13,7 @@ namespace Contract.Account
 
     public class PatientCreateDto
     {
-        public int PatientId { get; set; }
+      
         public string FirstName { get; set; } = string.Empty; // Ime
         public string? LastName { get; set; } // Prezime
         public DateTime DateOfBirth { get; set; } // Datum rođenja

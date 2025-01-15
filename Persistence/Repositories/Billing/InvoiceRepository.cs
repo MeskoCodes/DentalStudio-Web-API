@@ -1,6 +1,6 @@
 ﻿using Domain.Entities.Billing;
 using Domain.Repositories.Billing;
-using Microsoft.EntityFrameworkCore;
+
 
 namespace Persistence.Repositories.Billing
 {

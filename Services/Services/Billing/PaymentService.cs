@@ -1,95 +1,60 @@
-﻿using Contract;
-using Contract.Billing;
-using Domain.Entities;
+﻿using Contract.Billing;
 using Domain.Entities.Billing;
-using Domain.Repositories;
 using Domain.Repositories.Common;
-using Mapster;
-using Services.Abstractions;
-using Services.Abstractions.Billing;
 
-namespace Services.Billing
+namespace Services
 {
-    public class PaymentService(IRepositoryManager repositoryManager) : IPaymentService
+    public class PaymentService : IPaymentService
     {
-        public async Task<GeneralResponseDto> Create(PaymentCreateDto paymentDto, CancellationToken cancellationToken = default)
+        private readonly IRepositoryManager _repositoryManager;
+
+        public PaymentService(IRepositoryManager repositoryManager)
         {
-            try
+            _repositoryManager = repositoryManager;
+        }
+        public async Task<IEnumerable<PaymentDto>> GetAllAsync(CancellationToken cancellationToken)
+        {
+            var payment = await _repositoryManager.PaymentRepository.GetAllAsync(cancellationToken);
+            return payment.Adapt<IEnumerable<PaymentDto>>();
+        }
+
+        public async Task<PaymentDto> GetByIdAsync(int paymentId, CancellationToken cancellationToken)
+        {
+            var payment = await _repositoryManager.PaymentRepository.GetByIdAsync(paymentId, cancellationToken);
+            return payment.Adapt<PaymentDto>();
+        }
+
+        public async Task CreateAsync(PaymentCreateDto paymentDto, CancellationToken cancellationToken)
+        {
+            var payment = paymentDto.Adapt<Payment>();
+            _repositoryManager.PaymentRepository.CreatePayment(payment);
+            await _repositoryManager.UnitOfWork.SaveChangesAsync(cancellationToken);
+        }
+
+        public async Task UpdateAsync(int paymentId, PaymentUpdateDto paymentDto, CancellationToken cancellationToken)
+        {
+            var payment = await _repositoryManager.PaymentRepository.GetByIdAsync(paymentId, cancellationToken);
+
+            if (payment == null)
             {
-                var payment = paymentDto.Adapt<Payment>();
-                repositoryManager.PaymentRepository.CreatePayment(payment);
-                var rowsAffected = await repositoryManager.UnitOfWork.SaveChangesAsync(cancellationToken);
-                if (rowsAffected != 1)
-                {
-                    return new GeneralResponseDto
-                    {
-                        IsSuccess = false,
-                        Message = "Error!"
-                    };
-                }
-
-                return new GeneralResponseDto { Message = "Success!" };
+                throw new KeyNotFoundException($"Payment with ID {paymentId} not found.");
             }
-            catch (Exception ex)
-            {
-                return new GeneralResponseDto
-                {
-                    IsSuccess = false,
-                    Message = ex.Message
-                };
-            }
+
+            payment.InvoiceId = paymentDto.InvoiceId;
+            payment.Amount = paymentDto.Amount;
+            payment.PaymentDate = paymentDto.PaymentDate;
+            payment.PaymentMethod = paymentDto.PaymentMethod;
+
+            await _repositoryManager.UnitOfWork.SaveChangesAsync(cancellationToken);
         }
 
-        public Task<GeneralResponseDto> CreateAsync(PaymentCreateDto paymentDto, CancellationToken cancellationToken)
+
+        public async Task DeleteAsync(int paymentId, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var payment = await _repositoryManager.PaymentRepository.GetByIdAsync(paymentId, cancellationToken);
+            _repositoryManager.PaymentRepository.DeletePayment(payment);
+            await _repositoryManager.UnitOfWork.SaveChangesAsync(cancellationToken);
         }
 
-        public Task<GeneralResponseDto> CreatePayment(PaymentCreateDto paymentDto, CancellationToken cancellationToken = default)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<GeneralResponseDto> DeleteAsync(int paymentId, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<GeneralResponseDto> DeletePayment(string paymentId, CancellationToken cancellationToken = default)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IEnumerable<PaymentDto>> GetAllAsync(CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IEnumerable<PaymentDto>> GetAllPayments(CancellationToken cancellationToken = default)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<PaymentDto> GetByIdAsync(int paymentId, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<PaymentDto> GetPaymentById(string paymentId, CancellationToken cancellationToken = default)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<GeneralResponseDto> UpdateAsync(int paymentId, PaymentUpdateDto paymentDto, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<GeneralResponseDto> UpdatePayment(string paymentId, PaymentUpdateDto paymentDto, CancellationToken cancellationToken = default)
-        {
-            throw new NotImplementedException();
-        }
-
-        // Implement other methods (Delete, GetAll, GetById, Update) similarly
     }
 }

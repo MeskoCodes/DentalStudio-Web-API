@@ -1,5 +1,4 @@
-﻿using Domain.Entities;
-using Domain.Entities.Billing;
+﻿using Domain.Entities.Billing;
 
 namespace Domain.Repositories.Billing
 {

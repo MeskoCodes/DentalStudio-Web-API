@@ -1,9 +1,4 @@
-﻿using Contract.Account;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace Services.Abstractions
+﻿namespace Services.Abstractions
 {
     public interface IPatientService
     {

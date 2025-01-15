@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Contract.Authentification;
+namespace Contract;
 
 public class RegistrationDto
 {

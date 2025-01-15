@@ -1,13 +1,4 @@
-﻿using Contract.Account;
-using Domain.Entities;
-using Domain.Repositories;
-using Domain.Repositories.Common;
-using Mapster;
-using Services.Abstractions;
-using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using Domain.Repositories.Common;
 
 namespace Services
 {
@@ -22,8 +13,8 @@ namespace Services
 
         public async Task<IEnumerable<PatientDto>> GetAllAsync(CancellationToken cancellationToken)
         {
-            var patients = await _repositoryManager.PatientRepository.GetAllAsync(cancellationToken);
-            return patients.Adapt<IEnumerable<PatientDto>>();
+            var patient = await _repositoryManager.PatientRepository.GetAllAsync(cancellationToken);
+            return patient.Adapt<IEnumerable<PatientDto>>();
         }
 
         public async Task<PatientDto> GetById(int patientId, CancellationToken cancellationToken)
@@ -56,10 +47,10 @@ namespace Services
             _repositoryManager.PatientRepository.DeletePatient(patient);
             await _repositoryManager.UnitOfWork.SaveChangesAsync(cancellationToken);
         }
-
         public Task<PatientDto> GetByIdAsync(int patientId, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
+
     }
 }

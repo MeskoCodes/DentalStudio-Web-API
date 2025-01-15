@@ -1,8 +1,8 @@
-﻿using Domain.Entities.Scheduling;
-using Domain.Repositories.Scheduling;
-using Microsoft.EntityFrameworkCore;
+﻿
+using Domain.Repositories;
 
-namespace Persistence.Repositories.Scheduling
+
+namespace Persistence.Repositories
 {
     public class AppointmentRepository(DataContext dataContext) : RepositoryBase<Appointment>(dataContext), IAppointmentRepository
     {

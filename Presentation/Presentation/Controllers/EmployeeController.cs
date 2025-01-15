@@ -1,10 +1,11 @@
-﻿using Contract;
-using Contract.Account;
+﻿
+using Azure;
+using Domain.Repositories.Common;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Abstractions;
 
-namespace Presentation.Controllers
+namespace MDental.UI.Controllers
 {
     [ApiController]
     [Route("api/employees")]
@@ -24,6 +25,7 @@ namespace Presentation.Controllers
             var response = await _serviceManager.EmployeeService.GetAllAsync(cancellationToken);
             return Ok(response);
         }
+    
 
         [Authorize(Roles = "Admin")]
         [HttpDelete("delete/{employeeId}")]

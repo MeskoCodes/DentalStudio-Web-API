@@ -1,6 +1,5 @@
-﻿using Domain.Entities;
-using Domain.Repositories;
-using Microsoft.EntityFrameworkCore;
+﻿using Domain.Repositories;
+
 
 namespace Persistence.Repositories
 {

@@ -10,9 +10,7 @@ global using System.Security.Claims;
 global using System.Security.Cryptography;
 global using System.Text;
 using Domain.Repositories.Common;
-using Services.Abstractions.Billing;
-using Services.Billing;
-using Services.Scheduling;
+using Contract.Billing;
 
 namespace Services
 {
