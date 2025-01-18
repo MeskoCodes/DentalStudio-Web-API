@@ -1,13 +1,17 @@
 ﻿using Domain.Entities;
+using Domain.Repositories.Common;
 
-namespace Domain.Repositories
+namespace Domain.Repositories;
+
+public interface IAppointmentRepository : IRepositoryBase<Appointment>
 {
-    public interface IAppointmentRepository
-    {
-        Task<Appointment> GetByIdAsync(int appointmentId, CancellationToken cancellationToken = default);
-        Task<IEnumerable<Appointment>> GetAllAsync(CancellationToken cancellationToken = default);
-        void CreateAppointment(Appointment appointment);
-        void UpdateAppointment(Appointment appointment);
-        void DeleteAppointment(Appointment appointment);
-    }
+    Task<IEnumerable<Appointment>> GetAll(CancellationToken cancellationToken = default);
+
+    Task<Appointment> GetById(int appointmentId, CancellationToken cancellationToken = default);
+
+    void CreateAppointment(Appointment appointment, CancellationToken cancellationToken = default);
+
+    void DeleteAppointment(Appointment appointment, CancellationToken cancellationToken = default);
+
+    void UpdateAppointment(Appointment appointment, CancellationToken cancellationToken = default);
 }

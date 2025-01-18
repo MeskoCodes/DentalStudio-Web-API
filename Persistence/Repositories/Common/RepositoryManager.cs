@@ -1,7 +1,5 @@
 ﻿using Domain.Repositories;
-using Domain.Repositories.Billing;
 using Domain.Repositories.Common;
-using Persistence.Repositories.Billing;
 
 namespace Persistence.Repositories
 {

@@ -1,59 +1,48 @@
 ﻿using Contract.Billing;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Abstractions;
+using Services.Common.Dto.Billing;
 
-
-namespace MDental.UI.Controllers.Billing
+namespace Presentation.Controllers
 {
     [ApiController]
     [Route("api/invoices")]
-    public class InvoiceController : ControllerBase
+    public class InvoiceController(IServiceManager serviceManager) : ControllerBase
     {
-        private readonly IServiceManager _serviceManager;
-
-        public InvoiceController(IServiceManager serviceManager)
-        {
-            _serviceManager = serviceManager;
-        }
-
-        [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetAllInvoices(CancellationToken cancellationToken)
         {
-            var response = await _serviceManager.InvoiceService.GetAllAsync(cancellationToken);
+            var response = await serviceManager.InvoiceService.GetAll(cancellationToken);
             return Ok(response);
         }
 
-        [Authorize(Roles = "Admin")]
-        [HttpDelete("delete/{invoiceId}")]
+        [HttpDelete("{invoiceId}")]
         public async Task<IActionResult> Delete(int invoiceId, CancellationToken cancellationToken)
         {
-            await _serviceManager.InvoiceService.DeleteAsync(invoiceId, cancellationToken);
+            await serviceManager.InvoiceService.Delete(invoiceId, cancellationToken);
             return NoContent();
         }
 
         [HttpPost("create")]
         public async Task<IActionResult> Create([FromBody] InvoiceCreateDto invoiceDto, CancellationToken cancellationToken)
         {
-            await _serviceManager.InvoiceService.CreateAsync(invoiceDto, cancellationToken);
-            return Ok();
-        }
-
-        [Authorize]
-        [HttpGet("details/{invoiceId}")]
-        public async Task<IActionResult> GetInvoiceById(int invoiceId, CancellationToken cancellationToken)
-        {
-            var response = await _serviceManager.InvoiceService.GetByIdAsync(invoiceId, cancellationToken);
+            var response = await serviceManager.InvoiceService.Create(invoiceDto, cancellationToken);
             return Ok(response);
         }
 
-        [Authorize]
+        [HttpGet("details/{invoiceId}")]
+        public async Task<IActionResult> GetInvoiceById(int invoiceId, CancellationToken cancellationToken)
+        {
+            var response = await serviceManager.InvoiceService.GetById(invoiceId, cancellationToken);
+            return Ok(response);
+        }
+
+
         [HttpPut("update/{invoiceId}")]
         public async Task<IActionResult> UpdateInvoice(int invoiceId, [FromBody] InvoiceUpdateDto invoiceDto, CancellationToken cancellationToken)
         {
-            await _serviceManager.InvoiceService.UpdateAsync(invoiceId, invoiceDto, cancellationToken);
-            return NoContent();
+            var response = await serviceManager.InvoiceService.Update(invoiceId, invoiceDto, cancellationToken);
+            return Ok(response);
         }
     }
 }

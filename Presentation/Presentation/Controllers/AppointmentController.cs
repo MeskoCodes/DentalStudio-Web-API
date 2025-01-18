@@ -1,59 +1,49 @@
 ﻿using Contract;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Abstractions;
 
-namespace Presentation
+namespace Presentation.Controllers
 {
     [ApiController]
     [Route("api/appointments")]
-    public class AppointmentController : ControllerBase
+    public class AppointmentController(IServiceManager serviceManager) : ControllerBase
     {
-        private readonly IServiceManager _serviceManager;
-
-        public AppointmentController(IServiceManager serviceManager)
-        {
-            _serviceManager = serviceManager;
-        }
-
-        [Authorize]
+        [HttpGet]
         [HttpGet]
         public async Task<IActionResult> GetAllAppointments(CancellationToken cancellationToken)
         {
-            var response = await _serviceManager.AppointmentService.GetAllAsync(cancellationToken);
+            var response = await serviceManager.AppointmentService.GetAll(cancellationToken);
             return Ok(response);
         }
 
-        [Authorize]
-        [HttpGet("{appointmentId}")]
-        public async Task<IActionResult> GetAppointmentById(int appointmentId, CancellationToken cancellationToken)
+
+        [HttpDelete("{appointmentId}")]
+        public async Task<IActionResult> Delete(int appointmentId, CancellationToken cancellationToken)
         {
-            var response = await _serviceManager.AppointmentService.GetByIdAsync(appointmentId, cancellationToken);
-            return Ok(response);
+            await serviceManager.AppointmentService.Delete(appointmentId, cancellationToken);
+            return NoContent();
         }
 
-        [Authorize]
         [HttpPost("create")]
         public async Task<IActionResult> Create([FromBody] AppointmentCreateDto appointmentDto, CancellationToken cancellationToken)
         {
-            await _serviceManager.AppointmentService.CreateAsync(appointmentDto, cancellationToken);
-            return Ok(); // Vraćamo Ok() kao potvrdu uspešnog kreiranja
+            var response = await serviceManager.AppointmentService.Create(appointmentDto, cancellationToken);
+            return Ok(response);
         }
 
-        [Authorize]
+        [HttpGet("details/{appointmentId}")]
+        public async Task<IActionResult> GetAppointmentById(int appointmentId, CancellationToken cancellationToken)
+        {
+            var response = await serviceManager.AppointmentService.GetById(appointmentId, cancellationToken);
+            return Ok(response);
+        }
+
+
         [HttpPut("update/{appointmentId}")]
-        public async Task<IActionResult> Update(int appointmentId, [FromBody] AppointmentUpdateDto appointmentDto, CancellationToken cancellationToken)
+        public async Task<IActionResult> UpdateAppointment(int appointmentId, [FromBody] AppointmentUpdateDto appointmentDto, CancellationToken cancellationToken)
         {
-            await _serviceManager.AppointmentService.UpdateAsync(appointmentId, appointmentDto, cancellationToken);
-            return NoContent();
-        }
-
-        [Authorize(Roles = "Admin")]
-        [HttpDelete("delete/{appointmentId}")]
-        public async Task<IActionResult> Delete(int appointmentId, CancellationToken cancellationToken)
-        {
-            await _serviceManager.AppointmentService.DeleteAsync(appointmentId, cancellationToken);
-            return NoContent();
+            var response = await serviceManager.AppointmentService.Update(appointmentId, appointmentDto, cancellationToken);
+            return Ok(response);
         }
     }
 }

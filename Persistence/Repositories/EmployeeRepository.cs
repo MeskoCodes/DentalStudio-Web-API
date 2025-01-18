@@ -1,43 +1,26 @@
-﻿
-using Domain.Repositories;
-
+﻿using Domain.Repositories;
 
 namespace Persistence.Repositories
 {
     public class EmployeeRepository(DataContext dataContext) : RepositoryBase<Employee>(dataContext), IEmployeeRepository
     {
-        public async Task CreateEmployee(Employee Employee)
-        {
-            Create(Employee);
-            await SaveChangesAsync();
-        }
+        public void CreateEmployee(Employee employee, CancellationToken cancellationToken = default) => Create(employee);
 
-        public async Task DeleteEmployee(Employee Employee, CancellationToken cancellationToken)
-        {
-            Delete(Employee);
-            await SaveChangesAsync();
-        }
+        public void DeleteEmployee(Employee employee, CancellationToken cancellationToken = default) => Delete(employee);
 
-        public async Task UpdateEmployee(Employee Employee)
-        {
-            Update(Employee);
-            await SaveChangesAsync();
-        }
+        public void UpdateEmployee(Employee employee, CancellationToken cancellationToken = default) => Update(employee);
 
-        public async Task<IEnumerable<Employee>> GetAllAsync(CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<Employee>> GetAll(CancellationToken cancellationToken = default)
         {
             return await FindAll().ToListAsync(cancellationToken);
         }
 
-        public async Task<Employee?> GetByIdAsync(int EmployeeId, CancellationToken cancellationToken = default)
+        public async Task<Employee> GetById(int employeeId, CancellationToken cancellationToken = default)
         {
-            return await FindByCondition(Employee => EmployeeId == EmployeeId)
+            return await FindByCondition(e => e.EmployeeId == employeeId)
                 .FirstOrDefaultAsync(cancellationToken);
         }
 
-        private async Task SaveChangesAsync()
-        {
-            await dataContext.SaveChangesAsync();
-        }
+   
     }
 }

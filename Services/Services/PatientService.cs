@@ -2,55 +2,80 @@
 
 namespace Services
 {
-    public class PatientService : IPatientService
+    public class PatientService(IRepositoryManager repositoryManager) : IPatientService
     {
-        private readonly IRepositoryManager _repositoryManager;
-
-        public PatientService(IRepositoryManager repositoryManager)
+        public async Task<GeneralResponseDto> Create(PatientCreateDto patientDto, CancellationToken cancellationToken = default)
         {
-            _repositoryManager = repositoryManager;
+            try
+            {
+                var patient = patientDto.Adapt<Patient>();
+                repositoryManager.PatientRepository.CreatePatient(patient);
+                var rowsAffected = await repositoryManager.UnitOfWork.SaveChangesAsync(cancellationToken);
+                if (rowsAffected != 1)
+                {
+                    return new GeneralResponseDto
+                    {
+                        IsSuccess = false,
+                        Message = "Error!"
+                    };
+                }
+
+                return new GeneralResponseDto { Data = patient.PatientId, Message = "Success!" };
+            }
+            catch (Exception ex)
+            {
+                return new GeneralResponseDto
+                {
+                    IsSuccess = false,
+                    Message = ex.Message
+                };
+            }
         }
 
-        public async Task<IEnumerable<PatientDto>> GetAllAsync(CancellationToken cancellationToken)
+        public async Task Delete(int patientId, CancellationToken cancellationToken = default)
         {
-            var patient = await _repositoryManager.PatientRepository.GetAllAsync(cancellationToken);
-            return patient.Adapt<IEnumerable<PatientDto>>();
+            var patient = await repositoryManager.PatientRepository.GetById(patientId, cancellationToken);
+            repositoryManager.PatientRepository.DeletePatient(patient, cancellationToken);
+            await repositoryManager.UnitOfWork.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task<PatientDto> GetById(int patientId, CancellationToken cancellationToken)
+        public async Task<IEnumerable<PatientDto>> GetAll(CancellationToken cancellationToken = default)
         {
-            var patient = await _repositoryManager.PatientRepository.GetByIdAsync(patientId, cancellationToken);
+            var patients = await repositoryManager.PatientRepository.GetAll(cancellationToken);
+            return patients.Adapt<IEnumerable<PatientDto>>();
+        }
+
+        public async Task<PatientDto> GetById(int patientId, CancellationToken cancellationToken = default)
+        {
+            var patient = await repositoryManager.PatientRepository.GetById(patientId, cancellationToken);
             return patient.Adapt<PatientDto>();
         }
 
-        public async Task CreateAsync(PatientCreateDto patientDto, CancellationToken cancellationToken)
+        public async Task<GeneralResponseDto> Update(int patientId, PatientUpdateDto patientDto, CancellationToken cancellationToken = default)
         {
-            var patient = patientDto.Adapt<Patient>();
-            _repositoryManager.PatientRepository.CreatePatient(patient);
-            await _repositoryManager.UnitOfWork.SaveChangesAsync(cancellationToken);
-        }
+            try
+            {
+                var existingPatient = await repositoryManager.PatientRepository.GetById(patientId, cancellationToken);
+                if (existingPatient == null)
+                    return new GeneralResponseDto { IsSuccess = false, Message = "Patient not found." };
 
-        public async Task UpdateAsync(int patientId, PatientUpdateDto patientDto, CancellationToken cancellationToken)
-        {
-            var patient = await _repositoryManager.PatientRepository.GetByIdAsync(patientId, cancellationToken);
-            patient.FirstName = patientDto.FirstName;
-            patient.LastName = patientDto.LastName;
-            patient.MobileNumber = patientDto.MobileNumber;
-            patient.Email = patientDto.Email;
+                patientDto.Adapt(existingPatient);
 
-            await _repositoryManager.UnitOfWork.SaveChangesAsync(cancellationToken);
-        }
+                repositoryManager.PatientRepository.UpdatePatient(existingPatient);
+                var res = await repositoryManager.UnitOfWork.SaveChangesAsync(cancellationToken);
+                if (res != 1)
+                    return new GeneralResponseDto { IsSuccess = false };
 
-        public async Task DeleteAsync(int patientId, CancellationToken cancellationToken)
-        {
-            var patient = await _repositoryManager.PatientRepository.GetByIdAsync(patientId, cancellationToken);
-            _repositoryManager.PatientRepository.DeletePatient(patient);
-            await _repositoryManager.UnitOfWork.SaveChangesAsync(cancellationToken);
+                return new GeneralResponseDto { Data = existingPatient.PatientId, Message = "Success!" };
+            }
+            catch (Exception ex)
+            {
+                return new GeneralResponseDto
+                {
+                    IsSuccess = false,
+                    Message = ex.Message
+                };
+            }
         }
-        public Task<PatientDto> GetByIdAsync(int patientId, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
     }
 }

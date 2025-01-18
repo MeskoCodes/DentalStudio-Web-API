@@ -1,13 +1,17 @@
 ﻿using Domain.Entities;
+using Domain.Repositories.Common;
 
-namespace Domain.Repositories
+namespace Domain.Repositories;
+
+public interface ITreatmentRepository : IRepositoryBase<Treatment>
 {
-    public interface ITreatmentRepository
-    {
-        Task CreateTreatment(Treatment treatment);
-        Task DeleteTreatment(Treatment treatment);
-        Task UpdateTreatment(Treatment treatment);
-        Task<IEnumerable<Treatment>> GetAllAsync(CancellationToken cancellationToken = default);
-        Task<Treatment?> GetByIdAsync(int treatmentId, CancellationToken cancellationToken = default);
-    }
+    Task<IEnumerable<Treatment>> GetAll(CancellationToken cancellationToken = default);
+
+    Task<Treatment> GetById(int treatmentId, CancellationToken cancellationToken = default);
+
+    void CreateTreatment(Treatment treatment, CancellationToken cancellationToken = default);
+
+    void DeleteTreatment(Treatment treatment, CancellationToken cancellationToken = default);
+
+    void UpdateTreatment(Treatment treatment, CancellationToken cancellationToken = default);
 }

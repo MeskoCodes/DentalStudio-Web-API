@@ -1,13 +1,18 @@
 ﻿using Domain.Entities.Billing;
 
-namespace Domain.Repositories
+using Domain.Repositories.Common;
+
+namespace Domain.Repositories;
+
+public interface IPaymentRepository : IRepositoryBase<Payment>
 {
-    public interface IPaymentRepository
-    {
-        Task<Payment> GetByIdAsync(int paymentId, CancellationToken cancellationToken = default);
-        Task<IEnumerable<Payment>> GetAllAsync(CancellationToken cancellationToken = default);
-        void CreatePayment(Payment payment);
-        void UpdatePayment(Payment payment);
-        void DeletePayment(Payment payment);
-    }
+    Task<IEnumerable<Payment>> GetAll(CancellationToken cancellationToken = default);
+
+    Task<Payment> GetById(int paymentId, CancellationToken cancellationToken = default);
+
+    void CreatePayment(Payment payment, CancellationToken cancellationToken = default);
+
+    void DeletePayment(Payment payment, CancellationToken cancellationToken = default);
+
+    void UpdatePayment(Payment payment, CancellationToken cancellationToken = default);
 }

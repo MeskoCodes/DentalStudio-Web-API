@@ -1,6 +1,4 @@
-﻿using Domain.Repositories.Billing;
-
-namespace Domain.Repositories.Common
+﻿namespace Domain.Repositories.Common
 {
     public interface IRepositoryManager
     {

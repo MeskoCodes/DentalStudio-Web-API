@@ -1,11 +1,17 @@
-﻿namespace Domain.Repositories
+﻿using Domain.Entities;
+using Domain.Repositories.Common;
+
+namespace Domain.Repositories;
+
+public interface IEmployeeRepository : IRepositoryBase<Employee>
 {
-    public interface IEmployeeRepository
-    {
-        Task<Employee> GetByIdAsync(int EmployeeId, CancellationToken cancellationToken = default);
-        Task<IEnumerable<Employee>> GetAllAsync(CancellationToken cancellationToken = default);
-        Task CreateEmployee(Employee Employee); // Takođe bi mogla da bude asinkrona
-        Task UpdateEmployee(Employee Employee); // Takođe bi mogla da bude asinkrona
-        Task DeleteEmployee(Employee Employee, CancellationToken cancellationToken); // Ažurirano
-    }
+    Task<IEnumerable<Employee>> GetAll(CancellationToken cancellationToken = default);
+
+    Task<Employee> GetById(int employeeId, CancellationToken cancellationToken = default);
+
+    void CreateEmployee(Employee employee, CancellationToken cancellationToken = default);
+
+    void DeleteEmployee(Employee employee, CancellationToken cancellationToken = default);
+
+    void UpdateEmployee(Employee employee, CancellationToken cancellationToken = default);
 }

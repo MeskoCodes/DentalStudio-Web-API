@@ -1,60 +1,47 @@
-﻿
-using Contract.Billing;
-using Microsoft.AspNetCore.Authorization;
+﻿using Contract.Billing;
 using Microsoft.AspNetCore.Mvc;
 using Services.Abstractions;
 
-
-namespace MDental.UI.Controllers.Billing
+namespace Presentation.Controllers
 {
     [ApiController]
     [Route("api/payments")]
-    public class PaymentController : ControllerBase
+    public class PaymentController(IServiceManager serviceManager) : ControllerBase
     {
-        private readonly IServiceManager _serviceManager;
-
-        public PaymentController(IServiceManager serviceManager)
-        {
-            _serviceManager = serviceManager;
-        }
-
-        [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetAllPayments(CancellationToken cancellationToken)
         {
-            var response = await _serviceManager.PaymentService.GetAllAsync(cancellationToken);
+            var response = await serviceManager.PaymentService.GetAll(cancellationToken);
             return Ok(response);
         }
 
-        [Authorize(Roles = "Admin")]
-        [HttpDelete("delete/{paymentId}")]
+        [HttpDelete("{paymentId}")]
         public async Task<IActionResult> Delete(int paymentId, CancellationToken cancellationToken)
         {
-            await _serviceManager.PaymentService.DeleteAsync(paymentId, cancellationToken);
+            await serviceManager.PaymentService.Delete(paymentId, cancellationToken);
             return NoContent();
         }
 
         [HttpPost("create")]
         public async Task<IActionResult> Create([FromBody] PaymentCreateDto paymentDto, CancellationToken cancellationToken)
         {
-            await _serviceManager.PaymentService.CreateAsync(paymentDto, cancellationToken);
-            return Ok();
-        }
-
-        [Authorize]
-        [HttpGet("details/{paymentId}")]
-        public async Task<IActionResult> GetPaymentById(int paymentId, CancellationToken cancellationToken)
-        {
-            var response = await _serviceManager.PaymentService.GetByIdAsync(paymentId, cancellationToken);
+            var response = await serviceManager.PaymentService.Create(paymentDto, cancellationToken);
             return Ok(response);
         }
 
-        [Authorize]
+        [HttpGet("details/{paymentId}")]
+        public async Task<IActionResult> GetPaymentById(int paymentId, CancellationToken cancellationToken)
+        {
+            var response = await serviceManager.PaymentService.GetById(paymentId, cancellationToken);
+            return Ok(response);
+        }
+
+
         [HttpPut("update/{paymentId}")]
         public async Task<IActionResult> UpdatePayment(int paymentId, [FromBody] PaymentUpdateDto paymentDto, CancellationToken cancellationToken)
         {
-            await _serviceManager.PaymentService.UpdateAsync(paymentId, paymentDto, cancellationToken);
-            return NoContent();
+            var response = await serviceManager.PaymentService.Update(paymentId, paymentDto, cancellationToken);
+            return Ok(response);
         }
     }
 }

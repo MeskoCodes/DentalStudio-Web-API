@@ -1,11 +1,14 @@
-﻿namespace Services.Abstractions
+﻿namespace Services.Abstractions;
+
+public interface IAppointmentService
 {
-    public interface IAppointmentService
-    {
-        Task<IEnumerable<AppointmentDto>> GetAllAsync(CancellationToken cancellationToken);
-        Task<AppointmentDto> GetByIdAsync(int appointmentId, CancellationToken cancellationToken);
-        Task CreateAsync(AppointmentCreateDto appointmentDto, CancellationToken cancellationToken);
-        Task UpdateAsync(int appointmentId, AppointmentUpdateDto appointmentDto, CancellationToken cancellationToken);
-        Task DeleteAsync(int appointmentId, CancellationToken cancellationToken);
-    }
+    Task<IEnumerable<AppointmentDto>> GetAll(CancellationToken cancellationToken = default);
+
+    Task<AppointmentDto> GetById(int appointmentId, CancellationToken cancellationToken = default);
+
+    Task Delete(int appointmentId, CancellationToken cancellationToken = default);
+
+    Task<GeneralResponseDto> Create(AppointmentCreateDto appointmentDto, CancellationToken cancellationToken = default);
+
+    Task<GeneralResponseDto> Update(int appointmentId, AppointmentUpdateDto appointmentDto, CancellationToken cancellationToken = default);
 }

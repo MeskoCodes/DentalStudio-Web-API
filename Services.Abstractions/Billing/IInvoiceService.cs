@@ -1,13 +1,17 @@
 ﻿using Contract.Billing;
+using Services.Common.Dto.Billing;
 
-namespace Services.Abstractions
+namespace Services.Abstractions;
+
+public interface IInvoiceService
 {
-    public interface IInvoiceService
-    {
-        Task<IEnumerable<InvoiceDto>> GetAllAsync(CancellationToken cancellationToken);
-        Task<InvoiceDto> GetByIdAsync(int invoiceId, CancellationToken cancellationToken);
-        Task CreateAsync(InvoiceCreateDto invoiceDto, CancellationToken cancellationToken);
-        Task UpdateAsync(int invoiceId, InvoiceUpdateDto invoiceDto, CancellationToken cancellationToken);
-        Task DeleteAsync(int invoiceId, CancellationToken cancellationToken);
-    }
+    Task<IEnumerable<InvoiceDto>> GetAll(CancellationToken cancellationToken = default);
+
+    Task<InvoiceDto> GetById(int invoiceId, CancellationToken cancellationToken = default);
+
+    Task Delete(int invoiceId, CancellationToken cancellationToken = default);
+
+    Task<GeneralResponseDto> Create(InvoiceCreateDto invoiceDto, CancellationToken cancellationToken = default);
+
+    Task<GeneralResponseDto> Update(int invoiceId, InvoiceUpdateDto invoiceDto, CancellationToken cancellationToken = default);
 }

@@ -1,60 +1,81 @@
-﻿using Domain.Entities; // Uveri se da imaš potrebne using direktive
-using Domain.Repositories;
-using Domain.Repositories.Common;
-using Services.Abstractions;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using Domain.Repositories.Common;
 
 namespace Services
 {
-    public class TreatmentService : ITreatmentService
+    public class TreatmentService(IRepositoryManager repositoryManager) : ITreatmentService
     {
-        private readonly IRepositoryManager _repositoryManager;
-
-        public TreatmentService(IRepositoryManager repositoryManager)
+        public async Task<GeneralResponseDto> Create(TreatmentCreateDto treatmentDto, CancellationToken cancellationToken = default)
         {
-            _repositoryManager = repositoryManager;
+            try
+            {
+                var treatment = treatmentDto.Adapt<Treatment>();
+                repositoryManager.TreatmentRepository.CreateTreatment(treatment);
+                var rowsAffected = await repositoryManager.UnitOfWork.SaveChangesAsync(cancellationToken);
+                if (rowsAffected != 1)
+                {
+                    return new GeneralResponseDto
+                    {
+                        IsSuccess = false,
+                        Message = "Error!"
+                    };
+                }
+
+                return new GeneralResponseDto { Data = treatment.TreatmentId, Message = "Success!" };
+            }
+            catch (Exception ex)
+            {
+                return new GeneralResponseDto
+                {
+                    IsSuccess = false,
+                    Message = ex.Message
+                };
+            }
         }
 
-        public async Task<IEnumerable<TreatmentDto>> GetAllAsync(CancellationToken cancellationToken)
+        public async Task Delete(int treatmentId, CancellationToken cancellationToken = default)
         {
-          
-            var treatments = await _repositoryManager.TreatmentRepository.GetAllAsync(cancellationToken);
+            var treatment = await repositoryManager.TreatmentRepository.GetById(treatmentId, cancellationToken);
+            repositoryManager.TreatmentRepository.DeleteTreatment(treatment, cancellationToken);
+            await repositoryManager.UnitOfWork.SaveChangesAsync(cancellationToken);
+        }
 
-            
+        public async Task<IEnumerable<TreatmentDto>> GetAll(CancellationToken cancellationToken = default)
+        {
+            var treatments = await repositoryManager.TreatmentRepository.GetAll(cancellationToken);
             return treatments.Adapt<IEnumerable<TreatmentDto>>();
         }
 
-        public async Task<TreatmentDto> GetByIdAsync(int treatmentId, CancellationToken cancellationToken)
+        public async Task<TreatmentDto> GetById(int treatmentId, CancellationToken cancellationToken = default)
         {
-            
-            var treatment = await _repositoryManager.TreatmentRepository.GetByIdAsync(treatmentId, cancellationToken);
-
-          
-            if (treatment == null)
-            {
-               
-                return null; 
-            }
-
- 
+            var treatment = await repositoryManager.TreatmentRepository.GetById(treatmentId, cancellationToken);
             return treatment.Adapt<TreatmentDto>();
         }
 
-        public async Task CreateAsync(TreatmentCreateDto treatmentDto, CancellationToken cancellationToken)
+        public async Task<GeneralResponseDto> Update(int treatmentId, TreatmentUpdateDto treatmentDto, CancellationToken cancellationToken = default)
         {
-       
-        }
+            try
+            {
+                var existingTreatment = await repositoryManager.TreatmentRepository.GetById(treatmentId, cancellationToken);
+                if (existingTreatment == null)
+                    return new GeneralResponseDto { IsSuccess = false, Message = "Treatment not found." };
 
-        public async Task UpdateAsync(int treatmentId, TreatmentUpdateDto treatmentDto, CancellationToken cancellationToken)
-        {
-            
-        }
+                treatmentDto.Adapt(existingTreatment);
 
-        public async Task DeleteAsync(int treatmentId, CancellationToken cancellationToken)
-        {
-            
+                repositoryManager.TreatmentRepository.UpdateTreatment(existingTreatment);
+                var res = await repositoryManager.UnitOfWork.SaveChangesAsync(cancellationToken);
+                if (res != 1)
+                    return new GeneralResponseDto { IsSuccess = false };
+
+                return new GeneralResponseDto { Data = existingTreatment.TreatmentId, Message = "Success!" };
+            }
+            catch (Exception ex)
+            {
+                return new GeneralResponseDto
+                {
+                    IsSuccess = false,
+                    Message = ex.Message
+                };
+            }
         }
     }
 }

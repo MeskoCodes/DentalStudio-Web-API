@@ -1,11 +1,14 @@
-﻿namespace Services.Abstractions
+﻿namespace Services.Abstractions;
+
+public interface IPatientService
 {
-    public interface IPatientService
-    {
-        Task<IEnumerable<PatientDto>> GetAllAsync(CancellationToken cancellationToken);
-        Task<PatientDto> GetByIdAsync(int patientId, CancellationToken cancellationToken);
-        Task CreateAsync(PatientCreateDto patientDto, CancellationToken cancellationToken);
-        Task UpdateAsync(int patientId, PatientUpdateDto patientDto, CancellationToken cancellationToken);
-        Task DeleteAsync(int patientId, CancellationToken cancellationToken);
-    }
+    Task<IEnumerable<PatientDto>> GetAll(CancellationToken cancellationToken = default);
+
+    Task<PatientDto> GetById(int patientId, CancellationToken cancellationToken = default);
+
+    Task Delete(int patientId, CancellationToken cancellationToken = default);
+
+    Task<GeneralResponseDto> Create(PatientCreateDto patientDto, CancellationToken cancellationToken = default);
+
+    Task<GeneralResponseDto> Update(int patientId, PatientUpdateDto patientDto, CancellationToken cancellationToken = default);
 }

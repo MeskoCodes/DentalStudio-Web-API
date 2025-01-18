@@ -1,43 +1,26 @@
-﻿
-using Domain.Repositories;
-
+﻿using Domain.Repositories;
 
 namespace Persistence.Repositories
 {
     public class PatientRepository(DataContext dataContext) : RepositoryBase<Patient>(dataContext), IPatientRepository
     {
-        public async Task CreatePatient(Patient Patient)
-        {
-            Create(Patient);
-            await SaveChangesAsync();
-        }
+        public void CreatePatient(Patient patient, CancellationToken cancellationToken = default) => Create(patient);
 
-        public async Task DeletePatient(Patient Patient)
-        {
-            Delete(Patient);
-            await SaveChangesAsync();
-        }
+        public void DeletePatient(Patient patient, CancellationToken cancellationToken = default) => Delete(patient);
 
-        public async Task UpdatePatient(Patient Patient)
-        {
-            Update(Patient);
-            await SaveChangesAsync();
-        }
+        public void UpdatePatient(Patient patient, CancellationToken cancellationToken = default) => Update(patient);
 
-        public async Task<IEnumerable<Patient>> GetAllAsync(CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<Patient>> GetAll(CancellationToken cancellationToken = default)
         {
             return await FindAll().ToListAsync(cancellationToken);
         }
 
-        public async Task<Patient?> GetByIdAsync(int PatientId, CancellationToken cancellationToken = default)
+        public async Task<Patient> GetById(int patientId, CancellationToken cancellationToken = default)
         {
-            return await FindByCondition(Patient => Patient.Id == PatientId)
+            return await FindByCondition(p => p.PatientId == patientId)
                 .FirstOrDefaultAsync(cancellationToken);
         }
 
-        private async Task SaveChangesAsync()
-        {
-            await dataContext.SaveChangesAsync();
-        }
+
     }
 }

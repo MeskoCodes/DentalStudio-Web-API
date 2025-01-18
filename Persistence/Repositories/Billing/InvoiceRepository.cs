@@ -1,26 +1,27 @@
 ﻿using Domain.Entities.Billing;
-using Domain.Repositories.Billing;
+using Domain.Repositories;
 
-
-namespace Persistence.Repositories.Billing
+namespace Persistence.Repositories
 {
     public class InvoiceRepository(DataContext dataContext) : RepositoryBase<Invoice>(dataContext), IInvoiceRepository
     {
-        public void CreateInvoice(Invoice invoice) => Create(invoice);
+        public void CreateInvoice(Invoice invoice, CancellationToken cancellationToken = default) => Create(invoice);
 
-        public void DeleteInvoice(Invoice invoice) => Delete(invoice);
+        public void DeleteInvoice(Invoice invoice, CancellationToken cancellationToken = default) => Delete(invoice);
 
-        public void UpdateInvoice(Invoice invoice) => Update(invoice);
+        public void UpdateInvoice(Invoice invoice, CancellationToken cancellationToken = default) => Update(invoice);
 
-        public async Task<IEnumerable<Invoice>> GetAllAsync(CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<Invoice>> GetAll(CancellationToken cancellationToken = default)
         {
             return await FindAll().ToListAsync(cancellationToken);
         }
 
-        public async Task<Invoice?> GetByIdAsync(int invoiceId, CancellationToken cancellationToken = default)
+        public async Task<Invoice> GetById(int invoiceId, CancellationToken cancellationToken = default)
         {
-            return await FindByCondition(invoice => invoice.InvoiceId == invoiceId)
+            return await FindByCondition(i => i.InvoiceId == invoiceId)
                 .FirstOrDefaultAsync(cancellationToken);
         }
+
+
     }
 }
